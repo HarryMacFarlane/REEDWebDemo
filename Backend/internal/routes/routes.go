@@ -17,5 +17,9 @@ func RegisterRoutes(r chi.Router) {
 	userCtrl := controllers.NewUserController(svc)
 	userCtrl.RegisterRoutes(r)
 
+	// Aggregate controller - composes multiple models into DTOs
+	agg := controllers.NewAggregateController(svc)
+	agg.RegisterRoutes(r)
+
 	// TODO: register other controllers (models, admin, etc.)
 }
