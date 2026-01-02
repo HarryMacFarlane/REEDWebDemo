@@ -12,7 +12,7 @@ func TestInMemoryUserRepository_CRUD(t *testing.T) {
 	repo := NewInMemoryUserRepository()
 	ctx := context.Background()
 
-	u := &models.UserAccount{ID: "u1", Email: "a@example.com", Name: "Alice"}
+	u := &models.User{ID: "u1", Username: "alice", FirstName: "Alice", Email: "a@example.com"}
 	if err := repo.Create(ctx, u); err != nil {
 		t.Fatalf("create failed: %v", err)
 	}
@@ -34,7 +34,7 @@ func TestInMemoryUserRepository_CRUD(t *testing.T) {
 	}
 
 	// Update
-	u.Name = "Alice Updated"
+	u.FirstName = "Alice Updated"
 	if err := repo.Update(ctx, u); err != nil {
 		t.Fatalf("update failed: %v", err)
 	}
@@ -43,8 +43,8 @@ func TestInMemoryUserRepository_CRUD(t *testing.T) {
 	if err != nil {
 		t.Fatalf("get after update failed: %v", err)
 	}
-	if got2.Name != "Alice Updated" {
-		t.Fatalf("name not updated: %s", got2.Name)
+	if got2.FirstName != "Alice Updated" {
+		t.Fatalf("first name not updated: %s", got2.FirstName)
 	}
 
 	// Delete
@@ -56,7 +56,7 @@ func TestInMemoryUserRepository_CRUD(t *testing.T) {
 	}
 
 	// ensure timestamps set
-	u2 := &models.UserAccount{ID: "u2", Email: "b@example.com", Name: "Bob"}
+	u2 := &models.User{ID: "u2", Username: "bob", FirstName: "Bob", Email: "b@example.com"}
 	if err := repo.Create(ctx, u2); err != nil {
 		t.Fatalf("create u2 failed: %v", err)
 	}
@@ -66,12 +66,15 @@ func TestInMemoryUserRepository_CRUD(t *testing.T) {
 	}
 	// slight delay to ensure update changed timestamp
 	time.Sleep(1 * time.Millisecond)
-	got3.Name = "Bob2"
+	got3.Username = "Bob2"
 	if err := repo.Update(ctx, got3); err != nil {
 		t.Fatalf("update u2 failed: %v", err)
 	}
 	after, _ := repo.GetByID(ctx, "u2")
 	if !after.UpdatedAt.After(after.CreatedAt) && !after.UpdatedAt.Equal(after.CreatedAt) {
 		t.Fatalf("timestamps did not update")
+	}
+	if after.Username != "Bob2" {
+		t.Fatalf("username did not update")
 	}
 }

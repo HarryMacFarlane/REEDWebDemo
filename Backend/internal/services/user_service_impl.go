@@ -19,7 +19,7 @@ func NewUserService(repo repository.UserRepository) *UserServiceImpl {
 }
 
 func (s *UserServiceImpl) Create(ctx context.Context, payload interface{}) (interface{}, error) {
-	u, ok := payload.(*models.UserAccount)
+	u, ok := payload.(*models.User)
 	if !ok || u == nil {
 		return nil, errors.New("invalid payload")
 	}
@@ -50,7 +50,7 @@ func (s *UserServiceImpl) List(ctx context.Context) ([]interface{}, error) {
 }
 
 func (s *UserServiceImpl) Update(ctx context.Context, id string, payload interface{}) (interface{}, error) {
-	u, ok := payload.(*models.UserAccount)
+	u, ok := payload.(*models.User)
 	if !ok || u == nil {
 		return nil, errors.New("invalid payload")
 	}

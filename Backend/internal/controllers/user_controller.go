@@ -11,7 +11,7 @@ import (
 	"reed_backend/internal/services"
 )
 
-// UserController handles HTTP requests related to UserAccount.
+// UserController handles HTTP requests related to User.
 type UserController struct {
 	svc services.ModelService
 }
@@ -43,7 +43,7 @@ func (c *UserController) List(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *UserController) Create(w http.ResponseWriter, r *http.Request) {
-	var u models.UserAccount
+	var u models.User
 	if err := json.NewDecoder(r.Body).Decode(&u); err != nil {
 		http.Error(w, "invalid json", http.StatusBadRequest)
 		return
@@ -74,7 +74,7 @@ func (c *UserController) GetByID(w http.ResponseWriter, r *http.Request) {
 
 func (c *UserController) Update(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
-	var u models.UserAccount
+	var u models.User
 	if err := json.NewDecoder(r.Body).Decode(&u); err != nil {
 		http.Error(w, "invalid json", http.StatusBadRequest)
 		return
